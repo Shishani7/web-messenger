@@ -224,3 +224,6 @@ certs/*.pfx
 # Frontend build output
 frontend/dist/
 frontend/.cache/
+
+# Runtime data
+backend/data/db.json
