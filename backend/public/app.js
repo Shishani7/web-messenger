@@ -5,9 +5,15 @@ function setOutput(data) {
 }
 
 async function request(path, method, body) {
+  const headers = {};
+  if (body) headers['Content-Type'] = 'application/json';
+
+  const token = localStorage.getItem('token');
+  if (token) headers['Authorization'] = `Bearer ${token}`;
+
   const res = await fetch(path, {
     method,
-    headers: body ? { 'Content-Type': 'application/json' } : undefined,
+    headers,
     body: body ? JSON.stringify(body) : undefined,
   });
 
@@ -32,6 +38,9 @@ document.getElementById('btnRegister').addEventListener('click', async () => {
     setOutput('Отправляю запрос регистрации...');
     const { login, password } = getForm();
     const data = await request('/api/auth/register', 'POST', { login, password });
+    if (data.token) {
+      localStorage.setItem('token', data.token);
+    }
     setOutput({ ok: true, action: 'register', data });
   } catch (err) {
     setOutput({ ok: false, action: 'register', error: err.message });
@@ -43,6 +52,9 @@ document.getElementById('btnLogin').addEventListener('click', async () => {
     setOutput('Отправляю запрос логина...');
     const { login, password } = getForm();
     const data = await request('/api/auth/login', 'POST', { login, password });
+    if (data.token) {
+      localStorage.setItem('token', data.token);
+    }
     setOutput({ ok: true, action: 'login', data });
   } catch (err) {
     setOutput({ ok: false, action: 'login', error: err.message });
@@ -59,3 +71,12 @@ document.getElementById('btnPing').addEventListener('click', async () => {
   }
 });
 
+document.getElementById('btnMe')?.addEventListener('click', async () => {
+  try {
+    setOutput('Запрашиваю профиль...');
+    const data = await request('/api/auth/me', 'GET');
+    setOutput({ ok: true, action: 'me', data });
+  } catch (err) {
+    setOutput({ ok: false, action: 'me', error: err.message });
+  }
+});
