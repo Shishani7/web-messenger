@@ -99,9 +99,16 @@ app.post('/api/auth/register', async (req, res) => {
 
   users.push(newUser);
 
+  const token = jwt.sign(
+    {id: newUser.id, login: newUser.login},
+    JWT_SECRET,
+    {expiresIn: '1h'}
+  );
+
   res.status(201).json({
     id: newUser.id,
     login: newUser.login,
+    token
   });
 });
 
