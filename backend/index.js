@@ -7,6 +7,7 @@ const fs = require('fs')
 const path = require('path');
 const bcrypt = require('bcrypt');
 const jwt = require('jsonwebtoken');
+const cors = require('cors');
 
 // создаем приложение
 const app = express();
@@ -57,6 +58,17 @@ const authRequired = (req, res, next) => {
 
 // включаем поддержку JSON в теле запросов (req.body)
 app.use(express.json());
+
+// включаем CORS для работы с фронтендом
+app.use(cors({
+  origin: [
+    'http://localhost:3000',
+    'https://localhost:3000',
+    'http://0.0.0.0:3000',
+    'http://127.0.0.1:3000'
+  ],
+  credentials: true
+}));
 
 // раздаем статические файлы
 app.use('/static', express.static(path.join(__dirname, 'public')));
