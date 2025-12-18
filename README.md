@@ -27,9 +27,10 @@
 - `messages`: `{ id, content, createdAt, user: { id, login } }`
 
 ### Frontend
+- Глобальный обработчик ошибок: app/error.vue<br>
+- Главная страница: app/pages/index.vue<br>
+- Виджеты ошибок (404 и 500)<br>
 
-- **UI** для демонстрации/тестов (без консоли): `https://localhost:3001/ui` (`backend/public/*`).
-- **Nuxt‑фронтенд** в `frontend/` (заготовка/в разработке).
 
 ## Структура проекта (основное)
 
@@ -38,13 +39,44 @@ web-messenger/
   backend/
     certs/              # self-signed сертификат (key.pem/cert.pem)
     data/               # db.json (локальное хранилище)
-    public/             # минимальный UI (/ui)
+    public/             # тестовый UI (/ui)
     index.js            # HTTPS + REST API
-  frontend/             # Nuxt (заготовка)
+  frontend/
+  app/
+    app.vue                # Корневой компонент Vue
+    error.vue              # Глобальный обработчик ошибок
+    pages/
+      index.vue            # Главная страница (Nuxt Page)
+    sharded/
+      assets/
+        css/
+          main.css         # Глобальные стили
+      icons/
+        index.ts           # Общие иконки
+    widgets/
+      error/
+        404/
+          index.ts
+          ui/
+            index.vue      # Виджет ошибки 404
+        500/
+          index.ts
+          ui/
+            index.vue      # Виджет ошибки 500
+      main/
+        index.ts
+        ui/
+          index.vue        # Главный виджет страницы
+  public/
+    favicon.ico            # Иконка сайта
+    robots.txt             # robots.txt для поисковиков
+  nuxt.config.ts           # Конфигурация Nuxt
+  tsconfig.json            # Конфигурация TypeScript
+  package.json             # Зависимости проекта
   README.md
 ```
 
-## Быстрый старт (backend + UI)
+## Быстрый старт (backend + тестовый UI)
 
 ### 1) Установка зависимостей
 
@@ -71,6 +103,46 @@ node index.js
 - `https://localhost:3001/ui` — минимальный интерфейс
 
 Если браузер ругается на сертификат, нужно подтвердить исключение/доверие.
+
+## Cтарт (backend + frontend)
+
+### 1.1) Директория backend
+```bash
+cd backend
+```
+
+### 1.2) Конфиг `.env`
+
+Создай файл `backend/.env`:
+
+```env
+PORT=3001
+JWT_SECRET=change_me_to_random_string
+```
+
+### 1.3) Запуск
+
+```bash
+node index.js
+```
+
+### 2.1) Директория frontend
+```bash
+cd frontend
+```
+
+### 2.2) Установка зависимостей
+
+```bash
+npm install
+```
+
+### 2.3) Запуск
+
+```bash
+npm run dev
+```
+
 
 ## REST API
 
