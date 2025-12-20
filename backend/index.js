@@ -34,7 +34,6 @@ async function writeDb(db) {
   await fs.promises.writeFile(path_to_db, JSON.stringify(db, null, 2), 'utf-8');
 }
 
-
 const SALT_ROUNDS = 10;
 
 // проверка токена
@@ -222,6 +221,13 @@ app.post('/api/auth/login', async (req, res) => {
 app.get('/api/auth/me', authRequired, (req, res) => {
   res.json(req.user);
 });
+
+app.get('/api/messages/mine', authRequired, async (req, res) => {
+  const db = await readDb();
+  const mine = db.messages.filter(m => m.user?.id === req.user.id);
+  res.json(mine);
+});
+
 
 https.createServer(httpsOptions, app).listen(PORT, () => {
   console.log(`HTTPS server is running, connect to https://localhost:${PORT}`);

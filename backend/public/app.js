@@ -97,6 +97,17 @@ document.getElementById('btnLoad')?.addEventListener('click', async () => {
   }
 });
 
+document.getElementById('btnLoadMine')?.addEventListener('click', async () => {
+  try {
+    setMessagesOutput('Загружаю только мои сообщения...');
+    const data = await request('/api/messages/mine', 'GET');
+    setMessagesOutput(data.length ? data : 'Моих сообщений пока нет.');
+  } catch (err) {
+    setMessagesOutput({ ok: false, action: 'load-mine', error: err.message });
+  }
+});
+
+
 document.getElementById('btnSend')?.addEventListener('click', async () => {
   try {
     const input = document.getElementById('msg');
